@@ -3,7 +3,23 @@
 
 <Zombie>:
     size: (dp(opt.ZOMBIE_SIZE), dp(opt.ZOMBIE_SIZE))
+
     canvas:
+        Color:
+            rgba: opt.ZOMBIE_COLOR
+
         Ellipse:
             pos: self.pos
             size: self.size
+
+<Man>:
+    size: (dp(opt.MAN_SIZE), dp(opt.MAN_SIZE))
+
+    canvas:
+        Color:
+            rgba: opt.MAN_COLOR
+
+        Ellipse:
+            pos: self.pos
+            size: self.size
+    

@@ -1,1 +1,8 @@
-ZOMBIE_SIZE = 20 # radious
+ZOMBIE_SIZE  = 40 # radius
+ZOMBIE_COLOR = [1, 0, 0, 1]
+ZOMBIE_SPEED = 3
+
+MAN_COUNT = 20
+MAN_SIZE  = 20 # radius
+MAN_COLOR = [1, 1, 1, 1]
+MAN_SPEED = 10
