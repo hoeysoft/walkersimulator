@@ -1,8 +1,14 @@
-ZOMBIE_SIZE  = 40 # radius
-ZOMBIE_COLOR = [1, 0, 0, 1]
-ZOMBIE_SPEED = 1
+from kivy.metrics import *
 
 MAN_COUNT = 20
-MAN_SIZE  = 20 # radius
+ZOMBIE_COLOR = [1, 0, 0, 1]
 MAN_COLOR = [1, 1, 1, 1]
-MAN_SPEED = 3
+
+# resolution dependent
+BORDER       = dp(5)
+ZOMBIE_SIZE  = dp(40) # radius
+ZOMBIE_SPEED = dp(1)
+MAN_SIZE     = dp(20) # radius
+MAN_SPEED    = dp(1)
+
+
