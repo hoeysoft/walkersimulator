@@ -1,7 +1,7 @@
 from kivy.uix.widget import Widget
 from kivy.vector     import Vector
 
-from myutil import *
+from myutil  import *
 from options import *
 
 

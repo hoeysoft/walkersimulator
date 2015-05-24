@@ -36,6 +36,8 @@ class World(Widget):
         for man in self.men:
             man.update()
 
+        self._clamp_boundary()
+
     def _register_keyboard(self):
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self, 'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
@@ -60,3 +62,12 @@ class World(Widget):
         x = uniform(MAN_SIZE*2, self.width-MAN_SIZE*2)
         y = uniform(MAN_SIZE*2, self.height-MAN_SIZE*2)
         return (x, y)
+
+    def _clamp_boundary(self):
+        for w in self.children:
+            lx, ux = 0+w.width , self.width-w.width
+            ly, uy = 0+w.height, self.height-w.height
+            if w.x < lx: w.x = lx
+            if w.x > ux: w.x = ux
+            if w.y < ly: w.y = ly
+            if w.y > uy: w.y = uy
