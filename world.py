@@ -66,8 +66,8 @@ class World(Widget):
 
     def _clamp_boundary(self):
         for w in self.children:
-            lx, ux = BORDER, self.width-w.width-BORDER
-            ly, uy = BORDER, self.height-w.height-BORDER
+            lx, ux = 0, self.width -w.width
+            ly, uy = 0, self.height-w.height
             if w.x < lx: w.x = lx
             if w.x > ux: w.x = ux
             if w.y < ly: w.y = ly

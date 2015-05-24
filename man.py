@@ -11,29 +11,52 @@ import avoid
 
 class Man(Widget):
     def build(self):
-        self.vel = Vector(0,0)
+        self.direction = Vector(0, 0)
+        self.vel       = Vector(0, 0)
 
     def set_target(self, zombie):
-        pass
-        #direction = Vector(uniform(-1,1), uniform(-1,1)).normalize() 
-        #self.vel = direction*MAN_SPEED
-        #zombie.bind(pos=self._on_zombie_move)
-        #direction = (Vector(self.pos)-Vector(zombie.pos)).normalize()
-        #self.vel = direction*MAN_SPEED
+        zombie.bind(pos=self._on_zombie_move)
 
     def update(self, dt, men_locinfo):
-        pass
-        #pos  = Vector(self.pos)
-        #vel  = self.vel
-        #fsum = Vector(0, 0)
-        #for li in men_locinfo:
-        #    x_ij = pos - li[0]
-        #    if x_ij.length() > MAN_SIGHT: continue
-        #    v_ij = vel - li[1]
-        #    fsum += avoid.force(x_ij, v_ij, MAN_SIZE+MAN_SIZE)
+        fsum  = ((self.direction*MAN_SPEED*1.5)-self.vel)/.5
+        fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
+        fsum += self._favoid_others(men_locinfo)
+        fsum += self._favoid_wall()
 
-        #self.pos = (vel+fsum*dt)*dt + self.pos
+        self.vel = self.vel+fsum*dt
+        self.pos = self.vel*dt + self.pos
 
     def _on_zombie_move(self, instance, value):
-        direction = (Vector(self.pos)-Vector(value)).normalize()
-        self.vel = direction*MAN_SPEED
+        self.direction = (Vector(value)-Vector(self.pos)).normalize()
+
+    def _favoid_others(self, men_locinfo):
+        pos = Vector(self.pos)
+        vel = self.vel
+
+        fav = Vector(0, 0)
+        for li in men_locinfo:
+            fav += _favoid(pos-li[0], vel-li[1], MAN_SIZE+MAN_SIZE)
+        return fav
+
+    def _favoid_wall(self):
+        width  = self.parent.width/2
+        height = self.parent.height/2
+
+        if self.x < width/2: wall1 = Vector(0, self.y)
+        else:                wall1 = Vector(width, self.y)
+
+        if self.y < height/2: wall2 = Vector(self.x, 0)
+        else:                 wall2 = Vector(self.x, height)
+
+        pos = Vector(self.pos)
+        vel = self.vel
+
+        fav  = Vector(0, 0)
+        fav += _favoid(pos-wall1, vel, MAN_SIZE)
+        fav += _favoid(pos-wall2, vel, MAN_SIZE)
+        return fav
+
+def _favoid(x_ij, v_ij, rsum):
+    if x_ij.length2() > MAN_SIGHT**2: return Vector(0, 0)
+    f = avoid.force(x_ij, v_ij, rsum)
+    return f.normalize()*min(f.length(), MAN_AVOID)
