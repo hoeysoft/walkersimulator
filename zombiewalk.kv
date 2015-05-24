@@ -1,0 +1,9 @@
+#:kivy 1.9.0
+#:import opt options
+
+<Zombie>:
+    size: (dp(opt.ZOMBIE_SIZE), dp(opt.ZOMBIE_SIZE))
+    canvas:
+        Ellipse:
+            pos: self.pos
+            size: self.size

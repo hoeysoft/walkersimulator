@@ -1,0 +1,21 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+App	zombiewalk.py	/^from kivy.app        import App$/;"	i
+Clock	zombiewalk.py	/^from kivy.clock      import Clock$/;"	i
+Widget	world.py	/^from kivy.uix.widget import Widget$/;"	i
+Widget	zombie.py	/^from kivy.uix.widget import Widget$/;"	i
+Widget	zombiewalk.py	/^from kivy.uix.widget import Widget$/;"	i
+World	world.py	/^class World(Widget):$/;"	c
+World	zombiewalk.py	/^from world  import World$/;"	i
+ZOMBIE_SIZE	options.py	/^ZOMBIE_SIZE = 20 # radious$/;"	v
+Zombie	world.py	/^from zombie import Zombie$/;"	i
+Zombie	zombie.py	/^class Zombie(Widget):$/;"	c
+Zombie	zombiewalk.py	/^from zombie import Zombie$/;"	i
+ZombieWalkApp	zombiewalk.py	/^class ZombieWalkApp(App):$/;"	c
+build	world.py	/^    def build(self):$/;"	m	class:World
+build	zombiewalk.py	/^    def build(self):$/;"	m	class:ZombieWalkApp
+update	world.py	/^    def update(self, dt):$/;"	m	class:World
