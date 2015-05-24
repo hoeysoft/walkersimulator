@@ -1,8 +1,8 @@
 from kivy.uix.widget import Widget
 from kivy.vector     import Vector
 
-from myutil  import *
-from options import *
+from myutil   import *
+from settings import *
 
 
 class Zombie(Widget):
@@ -15,8 +15,8 @@ class Zombie(Widget):
     def deacc(self, arrow):
         self.accs.remove(arrow)
 
-    def update(self):
-        self.pos = self._direction()*ZOMBIE_SPEED + self.pos
+    def update(self, dt):
+        self.pos = self._direction()*ZOMBIE_SPEED*dt + self.pos
 
     def _direction(self):
         if not self.accs:

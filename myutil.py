@@ -16,6 +16,3 @@ KEY_DIRECTION = { \
 
 def is_arrowkey(k):
     return (k in KEY_DIRECTION)
-
-def vsub(va, vb):
-    return Vector([a-b for a, b in zip(va,vb)])

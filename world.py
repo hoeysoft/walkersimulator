@@ -4,10 +4,10 @@ from kivy.vector      import Vector
 
 from random import uniform
 
-from myutil  import *
-from options import *
-from zombie  import Zombie
-from man     import Man
+from myutil   import *
+from settings import *
+from zombie   import Zombie
+from man      import Man
 
 
 class World(Widget):
@@ -32,9 +32,10 @@ class World(Widget):
             man.set_target(self.zombie)
 
     def update(self, dt):
-        self.zombie.update()
+        self.zombie.update(dt)
+        men_locinfo = [(Vector(x.pos), Vector(x.vel)) for x in self.men]
         for man in self.men:
-            man.update()
+            man.update(dt, men_locinfo)
 
         self._clamp_boundary()
 

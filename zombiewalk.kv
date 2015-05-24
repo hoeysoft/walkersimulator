@@ -2,24 +2,19 @@
 #:import opt options
 
 <Zombie>:
-    size: (opt.ZOMBIE_SIZE, opt.ZOMBIE_SIZE)
-
     canvas:
         Color:
             rgba: opt.ZOMBIE_COLOR
 
         Ellipse:
             pos: self.pos
-            size: self.size
+            size: (opt.ZOMBIE_SIZE, opt.ZOMBIE_SIZE)
 
 <Man>:
-    size: (opt.MAN_SIZE, opt.MAN_SIZE)
-
     canvas:
         Color:
             rgba: opt.MAN_COLOR
 
         Ellipse:
             pos: self.pos
-            size: self.size
-    
+            size: (opt.MAN_SIZE, opt.MAN_SIZE)
