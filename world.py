@@ -18,7 +18,8 @@ class World(Widget):
         self.zombie.build()
         self.add_widget(self.zombie)
 
-        self.men = []
+        self.men          = []
+        self.decide_order = 0
         for i in xrange(MAN_COUNT):
             man = Man()
             man.build()
@@ -33,10 +34,11 @@ class World(Widget):
 
     def update(self, dt):
         self.zombie.update(dt)
-        men_locinfo = [(Vector(x.pos), Vector(x.vel)) for x in self.men]
-        for man in self.men:
-            man.update(dt, men_locinfo)
 
+        men_locinfo = [(Vector(x.pos), Vector(x.vel)) for x in self.men]
+        for i, man in enumerate(self.men):
+            man.decide(dt, men_locinfo)
+            man.update(dt)
         self._clamp_boundary()
 
     def _register_keyboard(self):

@@ -1,3 +1,6 @@
+from kivy.config import Config
+Config.read('config.ini')
+
 from kivy.app        import App
 from kivy.clock      import Clock
 from kivy.uix.widget import Widget

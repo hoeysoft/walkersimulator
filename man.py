@@ -11,26 +11,30 @@ import avoid
 
 class Man(Widget):
     def build(self):
+        self.target    = Vector(0, 0)
         self.direction = Vector(0, 0)
         self.vel       = Vector(0, 0)
 
     def set_target(self, zombie):
-        zombie.bind(pos=self._on_zombie_move)
+        self.target = Vector(zombie.center)
+        zombie.bind(pos=self._on_zombie_moved)
 
-    def update(self, dt, men_locinfo):
+    def decide(self, dt, men_locinfo):
+        self.direction = (Vector(self.target)-Vector(self.center)).normalize()
         fsum  = ((self.direction*MAN_SPEED*1.5)-self.vel)/.5
         fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
         fsum += self._favoid_others(men_locinfo)
         fsum += self._favoid_wall()
-
         self.vel = self.vel+fsum*dt
-        self.pos = self.vel*dt + self.pos
 
-    def _on_zombie_move(self, instance, value):
-        self.direction = (Vector(value)-Vector(self.pos)).normalize()
+    def update(self, dt):
+        self.center = self.vel*dt + self.center
+
+    def _on_zombie_moved(self, ins, val):
+        self.target = Vector(ins.center)
 
     def _favoid_others(self, men_locinfo):
-        pos = Vector(self.pos)
+        pos = Vector(self.center)
         vel = self.vel
 
         fav = Vector(0, 0)
@@ -48,7 +52,7 @@ class Man(Widget):
         if self.y < height/2: wall2 = Vector(self.x, 0)
         else:                 wall2 = Vector(self.x, height)
 
-        pos = Vector(self.pos)
+        pos = Vector(self.center)
         vel = self.vel
 
         fav  = Vector(0, 0)
