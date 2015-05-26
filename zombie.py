@@ -6,8 +6,12 @@ from settings import *
 
 
 class Zombie(Widget):
-    def build(self):
+    def build(self, settings):
         self.accs = set()
+
+        def on_use_avoidance(ins, val): self.use_avoidance = val
+        self.use_avoidance = settings.use_avoidance
+        settings.bind(use_avoidance=on_use_avoidance)
 
     def acc(self, arrow):
         self.accs.add(arrow)

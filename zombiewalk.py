@@ -5,14 +5,17 @@ from kivy.app        import App
 from kivy.clock      import Clock
 from kivy.uix.widget import Widget
 
-from world  import World
-from zombie import Zombie
+from settings import Settings
+from world    import World
+from zombie   import Zombie
 
 
 class ZombieWalkApp(App):
     def build(self):
+        self.settings = Settings()
+
         self.world = World()
-        self.world.build()
+        self.world.build(self.settings)
         return self.world
 
     def on_start(self):

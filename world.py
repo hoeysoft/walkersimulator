@@ -11,18 +11,18 @@ from man      import Man
 
 
 class World(Widget):
-    def build(self):
+    def build(self, settings):
         self._register_keyboard()
 
         self.zombie = Zombie()
-        self.zombie.build()
+        self.zombie.build(settings)
         self.add_widget(self.zombie)
 
         self.men          = []
         self.decide_order = 0
         for i in xrange(MAN_COUNT):
             man = Man()
-            man.build()
+            man.build(settings)
             self.add_widget(man)
             self.men.append(man)
 

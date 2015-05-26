@@ -1,6 +1,9 @@
-from kivy.metrics import *
+from kivy.metrics    import *
+from kivy.event      import EventDispatcher
+from kivy.properties import BooleanProperty
 
-MAN_COUNT  = 20
+# static settings
+MAN_COUNT    = 20
 
 # visual options
 ZOMBIE_COLOR = [1, 0, 0, 1]
@@ -15,3 +18,6 @@ MAN_SPEED = dp(300)
 
 MAN_SIGHT = MAN_SPEED*7
 MAN_AVOID = MAN_SPEED*5
+
+class Settings(EventDispatcher):
+    use_avoidance = BooleanProperty(False)

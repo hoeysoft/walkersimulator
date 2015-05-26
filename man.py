@@ -10,10 +10,14 @@ import avoid
 
 
 class Man(Widget):
-    def build(self):
+    def build(self, settings):
         self.target    = Vector(0, 0)
         self.direction = Vector(0, 0)
         self.vel       = Vector(0, 0)
+
+        def on_use_avoidance(ins, val): self.use_avoidance = val
+        self.use_avoidance = settings.use_avoidance
+        settings.bind(use_avoidance=on_use_avoidance)
 
     def set_target(self, zombie):
         self.target = Vector(zombie.center)
@@ -22,9 +26,10 @@ class Man(Widget):
     def decide(self, dt, men_locinfo):
         self.direction = (Vector(self.target)-Vector(self.center)).normalize()
         fsum  = ((self.direction*MAN_SPEED*1.5)-self.vel)/.5
-        fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
-        fsum += self._favoid_others(men_locinfo)
-        fsum += self._favoid_wall()
+        if self.use_avoidance:
+            fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
+            fsum += self._favoid_others(men_locinfo)
+            fsum += self._favoid_wall()
         self.vel = self.vel+fsum*dt
 
     def update(self, dt):
