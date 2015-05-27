@@ -1,6 +1,8 @@
 from kivy.uix.widget import Widget
 from kivy.vector     import Vector
 
+from random import uniform
+
 from myutil   import *
 from settings import *
 
@@ -9,7 +11,10 @@ class Zombie(Widget):
     def build(self, settings):
         self.accs = set()
 
-        def on_use_avoidance(ins, val): self.use_avoidance = val
+        def on_use_avoidance(ins, val):
+            self.use_avoidance = val
+            self._reset_position()
+
         self.use_avoidance = settings.use_avoidance
         settings.bind(use_avoidance=on_use_avoidance)
 
@@ -27,3 +32,11 @@ class Zombie(Widget):
             return Vector(0,0)
         directions = [KEY_DIRECTION[d] for d in self.accs]
         return reduce(lambda x,y: x+y, directions).normalize()
+
+    def _reset_position(self):
+        x = uniform(MAN_SIZE*2, self.parent.width-MAN_SIZE*2)
+        y = uniform(MAN_SIZE*2, self.parent.height-MAN_SIZE*2)
+        self.pos = (x,y)
+
+    def _reset_direction(self):
+        pass

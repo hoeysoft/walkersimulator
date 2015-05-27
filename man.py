@@ -15,21 +15,27 @@ class Man(Widget):
         self.direction = Vector(0, 0)
         self.vel       = Vector(0, 0)
 
-        def on_use_avoidance(ins, val): self.use_avoidance = val
+        self._reset_direction()
+
+        def on_use_avoidance(ins, val):
+            self.use_avoidance = val
+            self._reset_position()
+
         self.use_avoidance = settings.use_avoidance
         settings.bind(use_avoidance=on_use_avoidance)
 
     def set_target(self, zombie):
-        self.target = Vector(zombie.center)
-        zombie.bind(pos=self._on_zombie_moved)
+        pass
+        #self.target = Vector(zombie.center)
+        #zombie.bind(pos=self._on_zombie_moved)
 
     def decide(self, dt, men_locinfo):
-        self.direction = (Vector(self.target)-Vector(self.center)).normalize()
+        #self.direction = (Vector(self.target)-Vector(self.center)).normalize()
         fsum  = ((self.direction*MAN_SPEED*1.5)-self.vel)/.5
         if self.use_avoidance:
             fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
             fsum += self._favoid_others(men_locinfo)
-            fsum += self._favoid_wall()
+            #fsum += self._favoid_wall()
         self.vel = self.vel+fsum*dt
 
     def update(self, dt):
@@ -64,6 +70,14 @@ class Man(Widget):
         fav += _favoid(pos-wall1, vel, MAN_SIZE)
         fav += _favoid(pos-wall2, vel, MAN_SIZE)
         return fav
+
+    def _reset_position(self):
+        x = uniform(MAN_SIZE*2, self.parent.width-MAN_SIZE*2)
+        y = uniform(MAN_SIZE*2, self.parent.height-MAN_SIZE*2)
+        self.pos = (x,y)
+
+    def _reset_direction(self):
+        self.direction = Vector(uniform(-1,1), uniform(-1,1)).normalize()
 
 def _favoid(x_ij, v_ij, rsum):
     if x_ij.length2() > MAN_SIGHT**2: return Vector(0, 0)

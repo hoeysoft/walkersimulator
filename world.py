@@ -74,3 +74,5 @@ class World(Widget):
             if w.x > ux: w.x = ux
             if w.y < ly: w.y = ly
             if w.y > uy: w.y = uy
+            if w.x == lx or w.x== ux or w.y == ly or w.y == uy:
+                w._reset_direction()
