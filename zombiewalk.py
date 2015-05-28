@@ -6,6 +6,7 @@ from kivy.clock      import Clock
 from kivy.uix.widget import Widget
 
 from settings import Settings
+from mover    import Mover
 from world    import World
 from zombie   import Zombie
 
@@ -13,7 +14,12 @@ from zombie   import Zombie
 class ZombieWalkApp(App):
     def build(self):
         self.settings = Settings()
-
+        mover = Mover()
+        mover.update(10, self.settings)
+        self.settings.use_avoidance = False
+        self.settings.use_avoidance = True
+        mover.update(10, self.settings)
+ 
         self.world = World()
         self.world.build(self.settings)
 
