@@ -1,5 +1,11 @@
 from kivy.vector     import Vector
 
+
+def sync_to(self, name):
+    def listener(ins, val):
+        setattr(self, name, val)
+    return listener
+
 KEY_DIRECTION = { \
     'up'    : Vector(0, 1), \
     'w'     : Vector(0, 1), \
