@@ -18,6 +18,9 @@ class World(EventDispatcher):
         sync_my = partial(sync_to, self)
         settings.bind(world_size  =sync_my('size'))
         settings.bind(walker_count=sync_my('walker_count'))
+        settings.bind(use_avoidance=sync_my('use_avoidance'))
+
+    def update(
 
 
 #from myutil   import *

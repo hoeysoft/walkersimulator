@@ -19,7 +19,6 @@ class MainApp(App):
         self.world = World()
         self.world.build(self.settings)
         self.settings.set_default()
-        print (self.world.size)
         #w = Walker()
 #        mover = Mover()
 #        mover.update(10, self.settings)
@@ -34,9 +33,11 @@ class MainApp(App):
 #        return self.root
 
     def on_start(self):
-        pass
         #self.world.start()
-        #Clock.schedule_interval(self.world.update, 1.0/60.0)
+        Clock.schedule_interval(self.world.update, 1.0/60.0)
+
+    def gameloop(self, dt):
+        self.world.update(dt)
 
     def on_test(self):
         self.settings.use_avoidance = not self.settings.use_avoidance
