@@ -22,9 +22,9 @@ class Man(Widget):
     def decide(self, dt, men_locinfo):
         self.direction = (Vector(self.target)-Vector(self.center)).normalize()
         fsum  = ((self.direction*MAN_SPEED*1.5)-self.vel)/.5
-        fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
-        fsum += self._favoid_others(men_locinfo)
-        fsum += self._favoid_wall()
+        #fsum += Vector(uniform(-1., 1.), uniform(-1., 1.))
+        #fsum += self._favoid_others(men_locinfo)
+        #fsum += self._favoid_wall()
         self.vel = self.vel+fsum*dt
 
     def update(self, dt):
