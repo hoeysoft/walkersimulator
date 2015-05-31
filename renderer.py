@@ -1,37 +1,31 @@
 #from kivy.core.window import Window
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.graphics           import Rectangle, Ellipse, Line, Color
+#from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.boxlayout   import BoxLayout
+from kivy.uix.stencilview import StencilView
+from kivy.graphics        import Rectangle, Ellipse, Line, Color
 
 from myutil   import *
 from zombie   import Zombie
 from man      import Man
 
 
-class Renderer(RelativeLayout):
+#class Renderer(RelativeLayout):
+class Renderer(BoxLayout, StencilView):
     def update(self, world, dt):
         self.canvas.clear()
         with self.canvas:
             for walker in world.walkers:
-
-                pos       = walker.position
+                pos       = walker.position+self.pos
                 rad, rad2 = walker.radius, walker.radius*2
 
-                def is_inboundex():
-                    x, y   = pos
-                    bx, by = world.size
-                    return x-rad>=0 and x+rad<=bx and y-rad>=0 and y+rad<=by
-
-                if not is_inboundex(): continue
-
                 Color(1, 1, 1)
-                center = walker.position - Vector(rad, rad)
+                center = pos - Vector(rad, rad)
                 Ellipse(pos=center, size=(rad2, rad2))
 
                 Color(1, 0, 0)
                 dirlen = rad*1.5
                 points = [pos]+[pos+walker.direction*dirlen]
                 Line(points=[e for p in points for e in p])
-
 
                 Color(0, 1, 0)
                 vellen = rad*1.8
