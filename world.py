@@ -9,7 +9,11 @@ from walker   import *
 
 class QuadTree:
     def rebuild(self, objects):
-        pass
+        self.objects = [(o.position, o.velocity, o.radius) for o in objects]
+
+
+    def query(self, position):
+        return self.objects
 
 class World(EventDispatcher):
     quadtree = ObjectProperty(None)
@@ -20,7 +24,8 @@ class World(EventDispatcher):
         self.walker_factory = WalkerFactory()
         self.walker_factory.build(settings, self.quadtree)
 
-        sync_property(settings, 'walker_count', self)
+        sync_property(settings, 'world_size'   , self, 'size')
+        sync_property(settings, 'walker_count' , self)
         sync_property(settings, 'use_avoidance', self)
 
     def update(self, dt):
@@ -29,7 +34,12 @@ class World(EventDispatcher):
 
     def _arrange_walkers(self):
         # remove walkers in out of bound
-
+        def isinbound(w):
+            x,  y  = w.position
+            bx, by = self.size
+            rad    = w.radius
+            return (x+rad>=0 and x-rad<=bx) and (y+rad>=0 and y-rad<=by)
+        self.walkers = [w for w in self.walkers if isinbound(w)]
         # create walkers for filling up to walker_count
         remained_walker_count = len(self.walkers)
         if remained_walker_count < self.walker_count:

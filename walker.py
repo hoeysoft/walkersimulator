@@ -5,6 +5,8 @@ from kivy.vector     import Vector
 from random    import uniform
 from myutil    import *
 
+import avoid
+
 
 class Walker(EventDispatcher):
     position  = ObjectProperty(Vector(0, 0))
@@ -30,7 +32,7 @@ class Controller:
 
 class Updater:
     def __init__(self, quadtree):
-        pass
+        self.quadtree = quadtree
 
     def update(self, walker, dt):
         self.velocity = self.velocity+(force*dt)
@@ -44,16 +46,31 @@ class Updater:
         return pos, vel
 
     def _calculate_force(self, walker):
-        force  = self._base_force(walker)
-        force += self._damping_force()
-        #force += self._favoid_others(men_locinfo)
+        force  = self._force_base(walker)
+        force += self._force_damping()
+        force += self._force_avoid(walker)
         return force
 
-    def _base_force(self, walker):
+    def _force_base(self, walker):
         return ((walker.direction*walker.speed*1.5)-walker.velocity)/.5
 
-    def _damping_force(self):
+    def _force_damping(self):
         return Vector(uniform(-1., 1.), uniform(-1., 1.))
+
+    def _force_avoid(self, walker):
+        pos, vel, rad = \
+                Vector(walker.position), Vector(walker.velocity), walker.radius
+
+        fa = Vector(0, 0)
+        for opos, ovel, orad in self.quadtree.query(walker.position):
+            fa += self._force_avoid_with(pos-opos, vel-ovel, rad+orad)
+        return fa
+
+    def _force_avoid_with(self, x_ij, v_ij, rsum):
+        if x_ij.length2() > 1000**2: return Vector(0, 0)
+        f = avoid.force(x_ij, v_ij, rsum)
+        #return f.normalize()*min(f.length(), MAN_AVOID)
+        return f.normalize()*min(f.length(), 1000)
 
 
 class WalkerFactory(EventDispatcher):
