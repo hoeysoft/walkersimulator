@@ -31,7 +31,8 @@ class Controller:
         return walker.direction
 
 class Updater:
-    def __init__(self, quadtree):
+    def build(self, settings, quadtree):
+        sync_property(settings, 'use_avoidance', self)
         self.quadtree = quadtree
 
     def update(self, walker, dt):
@@ -43,7 +44,8 @@ class Updater:
     def _calculate_force(self, walker):
         force  = self._force_base(walker)
         force += self._force_damping()
-        force += self._force_avoid(walker)
+        if self.use_avoidance:
+            force += self._force_avoid(walker)
         return force
 
     def _force_base(self, walker):
@@ -70,8 +72,11 @@ class Updater:
 class WalkerFactory(EventDispatcher):
     def build(self, settings, quadtree):
         self.settings   = settings
+
         self.controller = Controller()
-        self.updater    = Updater(quadtree)
+
+        self.updater    = Updater()
+        self.updater.build(settings, quadtree)
 
         sync_property(settings, 'world_size', self, 'world_size')
         sync_property(settings, 'walker_radius', self, 'radius')

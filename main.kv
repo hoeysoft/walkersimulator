@@ -3,27 +3,11 @@
 
 BoxLayout:
     orientation: 'horizontal'
-    Button:
+    Controller:
         size_hint_x: 0.2
-        on_press: app.on_test()
-        
 
-<Zombie>:
-    size: (st.ZOMBIE_SIZE, st.ZOMBIE_SIZE)
-    canvas:
-        Color:
-            rgba: st.ZOMBIE_COLOR
-
-        Ellipse:
-            pos: self.pos
-            size: self.size
-
-<Man>:
-    size: (st.MAN_SIZE, st.MAN_SIZE)
-    canvas:
-        Color:
-            rgba: st.MAN_COLOR
-
-        Ellipse:
-            pos: self.pos
-            size: self.size
+<Controller>:
+    ToggleButton:
+        text: 'use avoidance'
+        state: 'down' if app.settings.use_avoidance else 'normal'
+        on_state: app.settings.use_avoidance = (args[1] == 'down')

@@ -2,21 +2,26 @@ from kivy.config import Config
 Config.read('config.ini')
 
 from kivy.app        import App
+from kivy.properties import ObjectProperty
 from kivy.clock      import Clock
 from kivy.uix.widget import Widget
 
-from myutil   import *
-from settings import Settings
-from world    import World
-from renderer import Renderer
+from myutil     import *
+from settings   import Settings
+from controller import Controller
+from world      import World
+from renderer   import Renderer
 #from walker   import Walker
 #from mover    import Mover
 #from zombie   import Zombie
 
 
 class MainApp(App):
+    settings = ObjectProperty(Settings())
+
     def build(self):
-        self.settings = Settings()
+        self.controller = Controller()
+        self.controller.build(self.settings)
 
         self.world = World()
         self.world.build(self.settings)
