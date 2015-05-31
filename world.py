@@ -9,7 +9,7 @@ from walker   import *
 
 class QuadTree:
     def rebuild(self, objects):
-        self.objects = [(o.position, o.velocity, o.radius) for o in objects]
+        self.objects = [(o.position[:], o.velocity[:], o.radius) for o in objects]
 
 
     def query(self, position):
@@ -40,6 +40,7 @@ class World(EventDispatcher):
             rad    = w.radius
             return (x+rad>=0 and x-rad<=bx) and (y+rad>=0 and y-rad<=by)
         self.walkers = [w for w in self.walkers if isinbound(w)]
+
         # create walkers for filling up to walker_count
         remained_walker_count = len(self.walkers)
         if remained_walker_count < self.walker_count:

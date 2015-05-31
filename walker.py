@@ -35,11 +35,6 @@ class Updater:
         self.quadtree = quadtree
 
     def update(self, walker, dt):
-        self.velocity = self.velocity+(force*dt)
-        self.position = (self.velocity*dt) + self.position
-        return walker.position, walker.velocity
-
-    def update(self, walker, dt):
         force = self._calculate_force(walker)
         vel = walker.velocity+(force*dt)
         pos = vel*dt + walker.position
@@ -52,14 +47,13 @@ class Updater:
         return force
 
     def _force_base(self, walker):
-        return ((walker.direction*walker.speed*1.5)-walker.velocity)/.5
+        return ((walker.direction*walker.speed*2.0)-walker.velocity)/.5
 
     def _force_damping(self):
         return Vector(uniform(-1., 1.), uniform(-1., 1.))
 
     def _force_avoid(self, walker):
-        pos, vel, rad = \
-                Vector(walker.position), Vector(walker.velocity), walker.radius
+        pos, vel, rad = walker.position, walker.velocity, walker.radius
 
         fa = Vector(0, 0)
         for opos, ovel, orad in self.quadtree.query(walker.position):
@@ -70,7 +64,7 @@ class Updater:
         if x_ij.length2() > 1000**2: return Vector(0, 0)
         f = avoid.force(x_ij, v_ij, rsum)
         #return f.normalize()*min(f.length(), MAN_AVOID)
-        return f.normalize()*min(f.length(), 1000)
+        return f.normalize()*min(f.length(), 200)
 
 
 class WalkerFactory(EventDispatcher):
@@ -85,7 +79,8 @@ class WalkerFactory(EventDispatcher):
 
     def create(self):
         w = Walker()
-        w.position   = [uniform(0, self.world_size[0]), uniform(0, self.world_size[1])]
+        w.position   = Vector([uniform(0, self.world_size[0]), \
+                               uniform(0, self.world_size[1])])
         w.direction  = Vector(uniform(-1, 1), uniform(-1, 1)).normalize()
 
         sync_property(self.settings, 'walker_speed',  w, 'speed')

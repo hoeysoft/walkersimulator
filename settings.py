@@ -20,7 +20,7 @@ MAN_AVOID = MAN_SPEED*5
 
 class Settings(EventDispatcher):
     world_size    = ObjectProperty(Vector(1024, 1024))
-    walker_count  = NumericProperty(50)
+    walker_count  = NumericProperty(30)
     use_avoidance = BooleanProperty(True)
-    walker_radius = NumericProperty(dp(30))
-    walker_speed  = NumericProperty(dp(50))
+    walker_radius = NumericProperty(dp(20))
+    walker_speed  = NumericProperty(dp(30))

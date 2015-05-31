@@ -5,6 +5,7 @@ from kivy.app        import App
 from kivy.clock      import Clock
 from kivy.uix.widget import Widget
 
+from myutil   import *
 from settings import Settings
 from world    import World
 from renderer import Renderer
@@ -21,6 +22,7 @@ class MainApp(App):
         self.world.build(self.settings)
 
         self.renderer = Renderer()
+        sync_property(self.renderer, 'size', self.settings, 'world_size')
         self.root.add_widget(self.renderer)
 
         return self.root

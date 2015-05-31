@@ -1,6 +1,6 @@
 #from kivy.core.window import Window
 from kivy.uix.widget  import Widget
-from kivy.graphics    import Ellipse
+from kivy.graphics    import Rectangle, Ellipse, Line, Color
 
 from myutil   import *
 from zombie   import Zombie
@@ -12,7 +12,23 @@ class Renderer(Widget):
         self.canvas.clear()
         with self.canvas:
             for walker in world.walkers:
-                Ellipse(pos=walker.position, size=(walker.radius, walker.radius))
+                pos       = walker.position
+                rad, rad2 = walker.radius, walker.radius*2
+
+                Color(1, 1, 1)
+                center = walker.position - Vector(rad, rad)
+                Ellipse(pos=center, size=(rad2, rad2))
+
+                Color(1, 0, 0)
+                dirlen = rad*1.5
+                points = [pos]+[pos+walker.direction*dirlen]
+                Line(points=[e for p in points for e in p])
+
+
+                Color(0, 1, 0)
+                vellen = rad*1.8
+                points = [pos]+[pos+walker.velocity.normalize()*vellen]
+                Line(points=[e for p in points for e in p])
 
 #    def build(self, settings):
 #        self._register_keyboard()
