@@ -3,13 +3,16 @@ from kivy.vector import Vector
 QTNODE_CAPACITY = 2
 
 class QuadTree:
+    def __init__(self):
+        self.root  = QtNode([0,0,0,0], QTNODE_CAPACITY)
+
     def rebuild(self, boundary, walkers):
-        self.parent  = QtNode(boundary, QTNODE_CAPACITY)
+        self.root  = QtNode(boundary, QTNODE_CAPACITY)
         for w in walkers:
-            self.parent.insert(w, w.position)
+            self.root.insert(w, w.position)
 
     def query(self, pos, rad):
-        return self.parent.query(pos, rad)
+        return self.root.query(pos, rad)
 
 class QtNode:
     def __init__(self, boundary, capacity):

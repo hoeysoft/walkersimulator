@@ -18,21 +18,30 @@ class MainApp(App):
     settings = ObjectProperty(Settings())
 
     def build(self):
-        self._register_keyboard()
         self.running = False
+        self._register_keyboard()
 
         self.world = World()
         self.world.build(self.settings)
 
         self.renderer = Renderer(size_hint_x=2)
+        self.renderer.build(self.settings, self.world)
         sync_property(self.renderer, 'size', self.settings, 'world_size')
         self.root.add_widget(self.renderer)
-
         return self.root
 
     def gameloop(self, dt):
-        self.world.update(dt)
-        self.renderer.update(self.world, dt)
+        if self.running:
+            self.world.update(dt)
+        self.renderer.update(dt)
+
+    def on_start(self):
+        # start after 0.5sec
+        Clock.schedule_once(self._toggle_running, 0.5)
+        Clock.schedule_interval(self.gameloop, 1/60.)
+
+    def _toggle_running(self, *args):
+        self.running = not self.running
 
     def _register_keyboard(self):
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self, 'text')
@@ -44,12 +53,7 @@ class MainApp(App):
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if (keycode[1] == 'spacebar'):
-            if self.running:
-                Clock.unschedule(self.gameloop)
-                self.running = False
-            else:
-                Clock.schedule_interval(self.gameloop, 1.0/60.0)
-                self.running = True
+            self._toggle_running()
         return True
 
 if __name__ == '__main__':

@@ -29,6 +29,7 @@ class OptSlider(BoxLayout):
         slider = Slider(value=value, min=minval, max=maxval)
         label = Label(text=self._tostr(value), halign='left', size_hint_x=0.3)
         def on_value(ins, value):
+            value = _clamp(value, minval, maxval)
             label.text = self._tostr(value)
             setattr(settings, optname, self._totype(value))
         slider.bind(value=on_value)
@@ -46,3 +47,6 @@ class OptSlider(BoxLayout):
 class OptSliderInt(OptSlider):
     def _totype(self, value):
         return int(value+.5)
+
+def _clamp(v, minv, maxv):
+    return max(minv, min(v, maxv))

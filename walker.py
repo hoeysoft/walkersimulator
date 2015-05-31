@@ -15,7 +15,7 @@ class Walker(EventDispatcher):
     sight     = NumericProperty(0)
     force     = NumericProperty(0)
     radius    = NumericProperty(0)
-    color     = ListProperty([])
+    targets   = ListProperty([])
 
     updater    = ObjectProperty(None)
 
@@ -77,7 +77,9 @@ class Updater:
         pos, vel, rad = walker.position, walker.velocity, walker.radius
 
         fa = Vector(0, 0)
-        for _, opos, ovel, orad in self.quadtree.query(walker.position, self.sight):
+        walker.targets = self.quadtree.query(walker.position, self.sight)
+        for w, opos, ovel, orad in walker.targets:
+            if w == walker: continue
             fa += self._force_avoid_with(pos-opos, vel-ovel, rad+orad)
         return fa
 
