@@ -1,6 +1,6 @@
 from kivy.vector import Vector
 
-QTNODE_CAPACITY = 2
+QTNODE_CAPACITY = 4
 
 class QuadTree:
     def __init__(self):
