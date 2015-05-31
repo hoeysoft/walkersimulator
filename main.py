@@ -10,7 +10,7 @@ from myutil     import *
 from settings   import Settings
 from controller import Controller
 from world      import World
-from renderer   import Renderer
+from screen     import Screen
 
 
 class MainApp(App):
@@ -23,16 +23,16 @@ class MainApp(App):
         self.world = World()
         self.world.build(self.settings)
 
-        self.renderer = Renderer(size_hint_x=2)
-        self.renderer.build(self.settings, self.world)
-        sync_property(self.renderer, 'size', self.settings, 'world_size')
-        self.root.add_widget(self.renderer)
+        self.screen = Screen(size_hint_x=2)
+        self.screen.build(self.settings, self.world)
+        sync_property(self.screen, 'size', self.settings, 'world_size')
+        self.root.add_widget(self.screen)
         return self.root
 
     def gameloop(self, dt):
         if self.running:
             self.world.update(dt)
-        self.renderer.update(dt)
+        self.screen.update(dt)
 
     def on_start(self):
         # start after 0.5sec

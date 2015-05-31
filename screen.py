@@ -6,7 +6,7 @@ from kivy.graphics        import Ellipse, Line, Color
 
 from myutil   import *
 
-class Renderer(BoxLayout, StencilView):
+class Screen(BoxLayout, StencilView):
     def build(self, settings, world):
         self.world    = world
         self.selected = None
