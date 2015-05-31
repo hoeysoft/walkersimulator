@@ -19,11 +19,8 @@ MAN_SIGHT = MAN_SPEED*7
 MAN_AVOID = MAN_SPEED*5
 
 class Settings(EventDispatcher):
-    world_size    = ObjectProperty(None)
-    walker_count  = NumericProperty(None)
-    use_avoidance = BooleanProperty(None)
-
-    def set_default(self):
-        self.world_size    = Vector(1024, 1024)
-        self.walker_count  = 10
-        self.use_avoidance = True
+    world_size    = ObjectProperty(Vector(1024, 1024))
+    walker_count  = NumericProperty(10)
+    use_avoidance = BooleanProperty(True)
+    walker_radius = NumericProperty(dp(30))
+    walker_speed  = NumericProperty(dp(100))

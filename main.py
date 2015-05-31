@@ -7,6 +7,7 @@ from kivy.uix.widget import Widget
 
 from settings import Settings
 from world    import World
+from renderer import Renderer
 #from walker   import Walker
 #from mover    import Mover
 #from zombie   import Zombie
@@ -18,26 +19,18 @@ class MainApp(App):
 
         self.world = World()
         self.world.build(self.settings)
-        self.settings.set_default()
-        #w = Walker()
-#        mover = Mover()
-#        mover.update(10, self.settings)
-#        self.settings.use_avoidance = False
-#        self.settings.use_avoidance = True
-#        mover.update(10, self.settings)
-# 
-#        self.world = World()
-#        self.world.build(self.settings)
-#
-#        self.root.add_widget(self.world)
-#        return self.root
+
+        self.renderer = Renderer()
+        self.root.add_widget(self.renderer)
+
+        return self.root
 
     def on_start(self):
-        #self.world.start()
-        Clock.schedule_interval(self.world.update, 1.0/60.0)
+        Clock.schedule_interval(self.gameloop, 1.0/60.0)
 
     def gameloop(self, dt):
         self.world.update(dt)
+        self.renderer.update(self.world, dt)
 
     def on_test(self):
         self.settings.use_avoidance = not self.settings.use_avoidance
