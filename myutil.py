@@ -1,6 +1,5 @@
 from kivy.vector     import Vector
 
-
 def sync_property(src, srcname, dst, dstname=None):
     if not dstname: dstname = srcname
     setattr(dst, dstname, getattr(src,srcname))

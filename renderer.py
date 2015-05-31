@@ -1,15 +1,10 @@
 #from kivy.core.window import Window
-#from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout   import BoxLayout
 from kivy.uix.stencilview import StencilView
 from kivy.graphics        import Rectangle, Ellipse, Line, Color
 
 from myutil   import *
-from zombie   import Zombie
-from man      import Man
 
-
-#class Renderer(RelativeLayout):
 class Renderer(BoxLayout, StencilView):
     def update(self, world, dt):
         self.canvas.clear()
