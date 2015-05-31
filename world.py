@@ -1,76 +1,51 @@
-from kivy.core.window import Window
-from kivy.uix.widget  import Widget
+from kivy.event       import EventDispatcher
+from kivy.properties  import ObjectProperty, ListProperty
 from kivy.vector      import Vector
-
-from random import uniform
 
 from myutil   import *
 from settings import *
-from zombie   import Zombie
-from man      import Man
+from quadtree import *
+from walker   import *
 
 
-class World(Widget):
-    def build(self):
-        self._register_keyboard()
+class World(EventDispatcher):
+    quadtree = ObjectProperty(None)
+    walkers  = ListProperty([])
 
-        self.zombie = Zombie()
-        self.zombie.build()
-        self.add_widget(self.zombie)
+    def build(self, settings):
+        self.quadtree = QuadTree()
+        self.walker_factory = WalkerFactory()
+        self.walker_factory.build(settings, self.quadtree)
 
-        self.men          = []
-        self.decide_order = 0
-        for i in xrange(MAN_COUNT):
-            man = Man()
-            man.build()
-            self.add_widget(man)
-            self.men.append(man)
-
-    def start(self):
-        self.zombie.pos = self.center
-        for man in self.men:
-            man.pos = self._randpos()
-            man.set_target(self.zombie)
+        sync_property(settings, 'world_size'   , self, 'size')
+        sync_property(settings, 'walker_count' , self)
+        sync_property(settings, 'use_avoidance', self)
 
     def update(self, dt):
-        self.zombie.update(dt)
+        self._arrange_walkers()
+        self._update_walkers(dt)
 
-        men_locinfo = [(Vector(x.pos), Vector(x.vel)) for x in self.men]
-        for i, man in enumerate(self.men):
-            man.decide(dt, men_locinfo)
-            man.update(dt)
-        self._clamp_boundary()
+    def _arrange_walkers(self):
+        # remove walkers in out of bound
+        def is_inbound(w):
+            x,  y  = w.position
+            bx, by = self.size
+            rad    = w.radius
+            return x+rad>=0 and x-rad<=bx and y+rad>=0 and y-rad<=by
+        self.walkers = [w for w in self.walkers if is_inbound(w)]
 
-    def _register_keyboard(self):
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self, 'text')
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self._keyboard.bind(on_key_up=self._on_keyboard_up)
+        # fit to walker_count
+        remained_walker_count = len(self.walkers)
+        if remained_walker_count < self.walker_count:
+            for i in xrange(self.walker_count - remained_walker_count):
+                self.walkers.append(self.walker_factory.create())
+        elif remained_walker_count > self.walker_count:
+            self.walkers = self.walkers[:self.walker_count]
 
-    def _keyboard_closed(self):
-        self._keyboard.unbind(on_key_up=self._on_keyboard_up)
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
-        self._keyboard = None
+        # rebuild quadtree
+        self.quadtree.rebuild([0,0]+self.size, self.walkers)
 
-    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        if is_arrowkey(keycode[1]):
-            self.zombie.acc(keycode[1])
-        return True
+    def _update_walkers(self, dt):
+        for walker in self.walkers:
+            walker.update(dt)
 
-    def _on_keyboard_up(self, keyboard, keycode):
-        if is_arrowkey(keycode[1]):
-            self.zombie.deacc(keycode[1])
-        return True
-
-    def _randpos(self):
-        x = uniform(MAN_SIZE*2, self.width-MAN_SIZE*2)
-        y = uniform(MAN_SIZE*2, self.height-MAN_SIZE*2)
-        return (x, y)
-
-    def _clamp_boundary(self):
-        for w in self.children:
-            lx, ux = 0, self.width -w.width
-            ly, uy = 0, self.height-w.height
-            if w.x < lx: w.x = lx
-            if w.x > ux: w.x = ux
-            if w.y < ly: w.y = ly
-            if w.y > uy: w.y = uy
