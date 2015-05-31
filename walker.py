@@ -51,7 +51,8 @@ class WalkerFactory(EventDispatcher):
 class Updater:
     def build(self, settings, quadtree):
         sync_property(settings, 'use_avoidance', self)
-        sync_property(settings, 'walker_force' , self, 'forcemax')
+        sync_property(settings, 'walker_force' , self, 'force')
+        sync_property(settings, 'walker_sight' , self, 'sight')
         self.quadtree = quadtree
 
     def update(self, walker, dt):
@@ -77,12 +78,12 @@ class Updater:
         pos, vel, rad = walker.position, walker.velocity, walker.radius
 
         fa = Vector(0, 0)
-        for opos, ovel, orad in self.quadtree.query(walker.position):
+        for _, opos, ovel, orad in self.quadtree.query(walker.position, self.sight):
             fa += self._force_avoid_with(pos-opos, vel-ovel, rad+orad)
         return fa
 
     def _force_avoid_with(self, x_ij, v_ij, rsum):
         if x_ij.length2() > 1000**2: return Vector(0, 0)
         f = avoid.force(x_ij, v_ij, rsum)
-        return f.normalize()*min(f.length(), self.forcemax)
+        return f.normalize()*min(f.length(), self.force)
 

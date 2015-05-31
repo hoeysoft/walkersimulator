@@ -4,16 +4,9 @@ from kivy.vector      import Vector
 
 from myutil   import *
 from settings import *
+from quadtree import *
 from walker   import *
 
-
-class QuadTree:
-    def rebuild(self, objects):
-        self.objects = [(o.position[:], o.velocity[:], o.radius) for o in objects]
-
-
-    def query(self, position):
-        return self.objects
 
 class World(EventDispatcher):
     quadtree = ObjectProperty(None)
@@ -50,7 +43,7 @@ class World(EventDispatcher):
             self.walkers = self.walkers[:self.walker_count]
 
         # rebuild quadtree
-        self.quadtree.rebuild(self.walkers)
+        self.quadtree.rebuild([0,0]+self.size, self.walkers)
 
     def _update_walkers(self, dt):
         for walker in self.walkers:
