@@ -58,3 +58,5 @@ target/
 
 # ctags
 tags
+
+.DS_Store
