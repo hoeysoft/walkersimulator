@@ -13,4 +13,4 @@ class Settings(EventDispatcher):
     walker_radius = BoundedNumericProperty(dp(20), min=dp(5),  max=dp(100))
     walker_sight  = BoundedNumericProperty(dp(40), min=dp(10), max=dp(200))
     walker_speed  = BoundedNumericProperty(dp(50), min=dp(1),  max=dp(200))
-    walker_force  = BoundedNumericProperty(dp(500), min=dp(100), max=dp(2500))
+    walker_force  = BoundedNumericProperty(dp(500), min=dp(100), max=dp(5000))
