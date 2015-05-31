@@ -11,9 +11,6 @@ from settings   import Settings
 from controller import Controller
 from world      import World
 from renderer   import Renderer
-#from walker   import Walker
-#from mover    import Mover
-#from zombie   import Zombie
 
 
 class MainApp(App):
@@ -34,9 +31,6 @@ class MainApp(App):
     def gameloop(self, dt):
         self.world.update(dt)
         self.renderer.update(self.world, dt)
-
-    def on_test(self):
-        self.settings.use_avoidance = not self.settings.use_avoidance
 
 if __name__ == '__main__':
     MainApp().run()

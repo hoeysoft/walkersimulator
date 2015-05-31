@@ -18,21 +18,40 @@ class Walker(EventDispatcher):
     radius    = NumericProperty(0)
     color     = ListProperty([])
 
-    controller = ObjectProperty(None)
     updater    = ObjectProperty(None)
 
     def update(self, dt):
-        self.direction               = self.controller.update(self, dt)
         self.position, self.velocity = self.updater.update(self, dt)
 
 
-class Controller:
-    def update(self, walker, dt):
-        return walker.direction
+class WalkerFactory(EventDispatcher):
+    def build(self, settings, quadtree):
+        self.settings   = settings
+
+        self.updater    = Updater()
+        self.updater.build(settings, quadtree)
+
+        sync_property(settings, 'world_size', self, 'world_size')
+        sync_property(settings, 'walker_radius', self, 'radius')
+        sync_property(settings, 'walker_speed' , self, 'speed')
+
+    def create(self):
+        w = Walker()
+        w.position  = Vector([uniform(0, self.world_size[0]), \
+                               uniform(0, self.world_size[1])])
+        w.direction = Vector(uniform(-1, 1), uniform(-1, 1)).normalize()
+
+        sync_property(self.settings, 'walker_radius', w, 'radius')
+        sync_property(self.settings, 'walker_speed',  w, 'speed')
+
+        w.updater = self.updater
+        return w
+
 
 class Updater:
     def build(self, settings, quadtree):
         sync_property(settings, 'use_avoidance', self)
+        sync_property(settings, 'walker_force' , self, 'forcemax')
         self.quadtree = quadtree
 
     def update(self, walker, dt):
@@ -65,32 +84,5 @@ class Updater:
     def _force_avoid_with(self, x_ij, v_ij, rsum):
         if x_ij.length2() > 1000**2: return Vector(0, 0)
         f = avoid.force(x_ij, v_ij, rsum)
-        #return f.normalize()*min(f.length(), MAN_AVOID)
-        return f.normalize()*min(f.length(), 200)
+        return f.normalize()*min(f.length(), self.forcemax)
 
-
-class WalkerFactory(EventDispatcher):
-    def build(self, settings, quadtree):
-        self.settings   = settings
-
-        self.controller = Controller()
-
-        self.updater    = Updater()
-        self.updater.build(settings, quadtree)
-
-        sync_property(settings, 'world_size', self, 'world_size')
-        sync_property(settings, 'walker_radius', self, 'radius')
-        sync_property(settings, 'walker_speed' , self, 'speed')
-
-    def create(self):
-        w = Walker()
-        w.position   = Vector([uniform(0, self.world_size[0]), \
-                               uniform(0, self.world_size[1])])
-        w.direction  = Vector(uniform(-1, 1), uniform(-1, 1)).normalize()
-
-        sync_property(self.settings, 'walker_speed',  w, 'speed')
-        sync_property(self.settings, 'walker_radius', w, 'radius')
-
-        w.controller = self.controller
-        w.updater    = self.updater
-        return w
