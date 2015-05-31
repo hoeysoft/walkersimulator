@@ -20,16 +20,12 @@ class MainApp(App):
     settings = ObjectProperty(Settings())
 
     def build(self):
-        self.controller = Controller()
-        self.controller.build(self.settings)
-
         self.world = World()
         self.world.build(self.settings)
 
-        self.renderer = Renderer()
+        self.renderer = Renderer(size_hint_x=2)
         sync_property(self.renderer, 'size', self.settings, 'world_size')
         self.root.add_widget(self.renderer)
-
         return self.root
 
     def on_start(self):

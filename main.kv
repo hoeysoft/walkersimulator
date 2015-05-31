@@ -4,10 +4,40 @@
 BoxLayout:
     orientation: 'horizontal'
     Controller:
-        size_hint_x: 0.2
+        size_hint_x: 0.75
+        canvas.before:
+            Color:
+                rgba: .3,.3,.3,1
+            Rectangle:
+                pos:  self.pos
+                size: self.size
+
+<OptLabel@Label>:
+    size_hint_x: 0.5
+    halign: 'right'
 
 <Controller>:
-    ToggleButton:
-        text: 'use avoidance'
-        state: 'down' if app.settings.use_avoidance else 'normal'
-        on_state: app.settings.use_avoidance = (args[1] == 'down')
+    cols: 2
+    spacing: [0]
+    padding: [0]
+
+    OptLabel:
+        text: 'avoidance'
+    Switch:
+        active: app.settings.use_avoidance
+        on_active: app.settings.use_avoidance = args[1]
+
+    OptLabel:
+        text: 'count'
+    OptSliderInt:
+        optname: 'walker_count'
+
+    OptLabel:
+        text: 'radius'
+    OptSlider:
+        optname: 'walker_radius'
+
+    OptLabel:
+        text: 'speed'
+    OptSlider:
+        optname: 'walker_speed'

@@ -34,18 +34,20 @@ class World(EventDispatcher):
 
     def _arrange_walkers(self):
         # remove walkers in out of bound
-        def isinbound(w):
+        def is_inbound(w):
             x,  y  = w.position
             bx, by = self.size
             rad    = w.radius
-            return (x+rad>=0 and x-rad<=bx) and (y+rad>=0 and y-rad<=by)
-        self.walkers = [w for w in self.walkers if isinbound(w)]
+            return x+rad>=0 and x-rad<=bx and y+rad>=0 and y-rad<=by
+        self.walkers = [w for w in self.walkers if is_inbound(w)]
 
-        # create walkers for filling up to walker_count
+        # fit to walker_count
         remained_walker_count = len(self.walkers)
         if remained_walker_count < self.walker_count:
             for i in xrange(self.walker_count - remained_walker_count):
                 self.walkers.append(self.walker_factory.create())
+        elif remained_walker_count > self.walker_count:
+            self.walkers = self.walkers[:self.walker_count]
 
         # rebuild quadtree
         self.quadtree.rebuild(self.walkers)
