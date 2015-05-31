@@ -1,13 +1,14 @@
 #from kivy.core.window import Window
-from kivy.uix.widget  import Widget
-from kivy.graphics    import Rectangle, Ellipse, Line, Color
+#from kivy.uix.widget  import Widget
+from kivy.uix.stencilview  import StencilView
+from kivy.graphics         import Rectangle, Ellipse, Line, Color
 
 from myutil   import *
 from zombie   import Zombie
 from man      import Man
 
 
-class Renderer(Widget):
+class Renderer(StencilView):
     def update(self, world, dt):
         self.canvas.clear()
         with self.canvas:
