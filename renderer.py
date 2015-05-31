@@ -2,7 +2,7 @@ from kivy.metrics         import *
 from kivy.vector          import Vector
 from kivy.uix.boxlayout   import BoxLayout
 from kivy.uix.stencilview import StencilView
-from kivy.graphics        import Rectangle, Ellipse, Line, Color
+from kivy.graphics        import Ellipse, Line, Color
 
 from myutil   import *
 

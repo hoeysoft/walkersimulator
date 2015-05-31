@@ -17,7 +17,7 @@ class Walker(EventDispatcher):
     radius    = NumericProperty(0)
     targets   = ListProperty([])
 
-    updater    = ObjectProperty(None)
+    updater   = ObjectProperty(None)
 
     def update(self, dt):
         self.position, self.velocity = self.updater.update(self, dt)

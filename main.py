@@ -5,7 +5,6 @@ from kivy.app         import App
 from kivy.properties  import ObjectProperty
 from kivy.clock       import Clock
 from kivy.core.window import Window
-from kivy.uix.widget  import Widget
 
 from myutil     import *
 from settings   import Settings

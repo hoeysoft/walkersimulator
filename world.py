@@ -48,4 +48,3 @@ class World(EventDispatcher):
     def _update_walkers(self, dt):
         for walker in self.walkers:
             walker.update(dt)
-

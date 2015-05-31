@@ -1,7 +1,6 @@
 from kivy.metrics    import *
 from kivy.event      import EventDispatcher
-from kivy.properties import ObjectProperty, BooleanProperty, \
-                            NumericProperty, BoundedNumericProperty
+from kivy.properties import ObjectProperty, BooleanProperty, BoundedNumericProperty
 from kivy.vector     import Vector
 
 
