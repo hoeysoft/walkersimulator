@@ -30,7 +30,11 @@ class Screen(BoxLayout, StencilView):
                 if walker == self.selected:
                     continue
 
-                Color(.5, .5, .5)
+                if self.selected:
+                    Color(.5, .5, .5)
+                else:
+                    Color(1, 1, 1)
+
                 self._draw_walker(walker)
 
                 if self.show_directions:
