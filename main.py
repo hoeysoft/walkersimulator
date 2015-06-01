@@ -36,7 +36,7 @@ class MainApp(App):
 
     def on_start(self):
         # start after 0.5sec
-        Clock.schedule_once(self._toggle_running, 0.5)
+        Clock.schedule_once(self._toggle_running, 1)
         Clock.schedule_interval(self.gameloop, 1/60.)
 
     def _toggle_running(self, *args):

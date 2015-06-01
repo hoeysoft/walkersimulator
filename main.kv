@@ -28,6 +28,12 @@ BoxLayout:
         on_active: app.settings.use_avoidance = args[1]
 
     OptLabel:
+        text: 'show directions'
+    Switch:
+        active: app.settings.show_directions
+        on_active: app.settings.show_directions = args[1]
+
+    OptLabel:
         text: 'count'
     OptSliderInt:
         optname: 'walker_count'

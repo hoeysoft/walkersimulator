@@ -78,7 +78,7 @@ class Updater:
         pos, vel, rad = walker.position, walker.velocity, walker.radius
 
         fa = Vector(0, 0)
-        walker.targets = self.quadtree.query(walker.position, self.sight)
+        walker.targets = self.quadtree.query(walker.position, self.sight+rad*2)
         walker.aforces = []
         for w, opos, ovel, orad in walker.targets:
             aforce = self._force_avoid_with(pos-opos, vel-ovel, rad+orad)
@@ -87,25 +87,25 @@ class Updater:
         return fa
 
     def _force_avoid_with(self, x_ij, v_ij, rsum):
-        if x_ij.length2() > 1000**2: return Vector(0, 0)
         f = _collision_avoidance_force(x_ij, v_ij, rsum)
         return f.normalize()*min(f.length(), self.force)
 
-def _collision_avoidance_force(x_ij, v_ij, rsum, settings=None):
+def _collision_avoidance_force(x_ij, v_ij, rsum):
     '''calculate avoidance force
     x_ij = x_i - x_j
     v_ij = v_i - v_j
     rsum = r_i + r_j
     '''
-    if settings is None: settings = {}
-    k    = settings.get('k'   , 1.5)
-    m    = settings.get('m'   , 2.0)
-    t0   = settings.get('t0'  , 3)
-    maxt = settings.get('maxt', 999)
+    # use default settings
+    k    = 1.5
+    m    = 2.0
+    t0   = 3
+    maxt = 999
 
     # handle so close case
-    dist = x_ij.length()
-    if rsum > dist: rsum = .99*dist
+    dist2 = x_ij.length2()
+    if rsum*rsum > dist2:
+        rsum = .99*sqrt(dist2)
 
     # speed diff is low
     a =  v_ij.dot(v_ij)
@@ -113,7 +113,7 @@ def _collision_avoidance_force(x_ij, v_ij, rsum, settings=None):
         return Vector(0, 0)
 
     b      = -x_ij.dot(v_ij)
-    c      = x_ij.dot(x_ij) - rsum**2;
+    c      = x_ij.dot(x_ij) - rsum*rsum;
     discr2 = b*b - a*c;
 
     # can't collide

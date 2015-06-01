@@ -11,7 +11,8 @@ LINERADIUS_RATIO = 1.8
 
 class Screen(BoxLayout, StencilView):
     def build(self, settings, world):
-        sync_property(settings, 'walker_radius', self)
+        sync_property(settings, 'walker_radius'  , self)
+        sync_property(settings, 'show_directions', self)
 
         self.world    = world
         self.selected = None
@@ -32,11 +33,12 @@ class Screen(BoxLayout, StencilView):
 
                 self._draw_walker(walker)
 
-                Color(1, 0, 0)
-                self._draw_direction(walker)
+                if self.show_directions or walker == self.selected:
+                    Color(1, 0, 0)
+                    self._draw_direction(walker)
 
-                Color(0, 1, 0)
-                self._draw_velocity(walker)
+                    Color(0, 1, 0)
+                    self._draw_velocity(walker)
 
             if self.selected:
                 Color(1, 1, 1)
