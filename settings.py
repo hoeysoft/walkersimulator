@@ -7,7 +7,7 @@ from kivy.vector     import Vector
 class Settings(EventDispatcher):
     world_size      = ObjectProperty(Vector(100, 100))
     use_avoidance   = BooleanProperty(False)
-    show_directions = BooleanProperty(True)
+    show_directions = BooleanProperty(False)
 
     walker_count  = BoundedNumericProperty(5, min=0, max=150)
     walker_radius = BoundedNumericProperty(dp(50), min=dp(5),  max=dp(100))

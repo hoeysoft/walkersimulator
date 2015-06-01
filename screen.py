@@ -7,7 +7,7 @@ from kivy.graphics        import Ellipse, Line, Color
 from myutil   import *
 
 
-LINERADIUS_RATIO = 1.8
+LINERADIUS_RATIO = 1.5
 
 class Screen(BoxLayout, StencilView):
     def build(self, settings, world):
@@ -27,35 +27,39 @@ class Screen(BoxLayout, StencilView):
                 pos       = walker.position+self.pos
                 rad, rad2 = walker.radius, walker.radius*2
 
-                # make highlighted
-                if self.selected: Color(.5, .5, .5)
-                else:             Color(1, 1, 1)
+                if walker == self.selected:
+                    continue
 
+                Color(.5, .5, .5)
                 self._draw_walker(walker)
 
-                if self.show_directions or walker == self.selected:
+                if self.show_directions:
                     Color(1, 0, 0)
                     self._draw_direction(walker)
-
                     Color(0, 1, 0)
                     self._draw_velocity(walker)
 
+            # hard coded...a littel duplicated..
             if self.selected:
                 Color(1, 1, 1)
                 self._draw_walker(self.selected)
-
                 Color(1, 0, 0)
                 self._draw_selected(self.selected)
-                
+
                 target_len = len(self.selected.targets)
                 for i, target  in enumerate(self.selected.targets):
                     t, _, _, _ = target # (obj, pos, vel, rad)
                     if t == self.selected: continue
-
                     Color(1, 1, 0)
                     self._draw_selected(t)
                     self._draw_force(self.selected, self.selected.aforces[i])
 
+                # order is important,
+                # draw directions on the top of the selected walker
+                Color(1, 0, 0)
+                self._draw_direction(self.selected)
+                Color(0, 1, 0)
+                self._draw_velocity(self.selected)
 
 
     def _draw_walker(self, w):
