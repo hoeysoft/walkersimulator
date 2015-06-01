@@ -17,6 +17,9 @@ class Screen(BoxLayout, StencilView):
         self.selected = None
 
     def update(self, dt):
+        if self.selected:
+            if self.selected not in self.world.walkers:
+                self.selected = None
         self.canvas.clear()
         with self.canvas:
             for walker in self.world.walkers:
